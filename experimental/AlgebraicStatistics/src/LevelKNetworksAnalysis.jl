@@ -310,6 +310,7 @@ function degree_two_component_stats(M, name)
         H = components_of_kernel(2, phi, show_progress = true)
         if isempty(H)
             println("0")
+            stats[name] = [name, 0, 0, true] 
             return nothing
         end
         I = Oscar.ideal(reduce(vcat, collect(values(H))))
