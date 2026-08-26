@@ -1,4 +1,4 @@
-n = 6
+n = 4
 M = []
 graphs = []
 partitions = lvl2_leaf_partition(n)
@@ -32,6 +32,7 @@ end
 
 types
 
+# doesn't work quite yet
 function calculate_blocks(A)
     n = size(A, 1)
     block_size = 10
