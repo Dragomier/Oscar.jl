@@ -1,4 +1,4 @@
-n = 5
+n = 6
 M = []
 graphs = []
 partitions = lvl2_leaf_partition(n)
@@ -19,11 +19,48 @@ for m in M
     push!(types, counter)
 end
 
+results = compare_networks(graphs)
+
+Oscar.save("dir_project_data/network_data/"*string(n)*"_leaves_data", results)
+
 Oscar.save("dir_project_data/network_data/"*string(n)*"_leaves_types_data", types)
 
-results = compare_networks(graphs)
+types = Oscar.load("dir_project_data/network_data/4_leaves_types_data")
+
+for i in 1:length(types)-1
+    display(results[types[i] + 1 : types[i+1], types[i] + 1:types[i+1]])
+end
+
+types
+
+function calculate_blocks(A)
+    n = size(A, 1)
+    block_size = 10
+
+    result = similar(A)
+
+    for i in 1:block_size:n
+        for j in i:block_size:n
+            results = compare_networks(graphs[i:i+block_size-1, j:j+block_size-1])
+
+            result[i:i+block_size-1, j:j+block_size-1] = calculated_block
+        end
+    end
+
+    return result
+end
+
+results = Oscar.load("dir_project_data/network_data/5_leaves_data")
+for i in 2:size(results, 1)
+    for j in 1:i-1
+        results[i, j] = results[j, i]
+    end
+end
 
 Oscar.save("dir_project_data/network_data/"*string(n)*"_leaves_data", results)
 
 display(results)
 print(types[4])
+
+graphs[11][1].phylo_model.graph.graph
+graphs[13][1].phylo_model.graph.graph
