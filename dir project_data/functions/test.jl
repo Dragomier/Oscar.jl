@@ -1,11 +1,10 @@
-n = 6
+n = 4
 M = []
 graphs = []
 partitions = lvl2_leaf_partition(n)
 for part in partitions
     push!(M, [hybrid_vertex_mod_sym(part), part])
 end
-
 counter = 0
 types = [1]
 for m in M
@@ -33,6 +32,7 @@ end
 
 types
 
+# doesn't work quite yet
 function calculate_blocks(A)
     n = size(A, 1)
     block_size = 10
