@@ -310,7 +310,8 @@ function degree_two_component_stats(M, name)
         H = components_of_kernel(2, phi, show_progress = true)
         if isempty(H)
             println("0")
-            stats[name] = [name, 0, 0, true] 
+            stats[name] = [name, 0, 0, true]
+            serialize("dir_project_data/stats", stats) 
             return nothing
         end
         I = Oscar.ideal(reduce(vcat, collect(values(H))))
@@ -414,7 +415,7 @@ function compare_two_networks(net_1, net_2)
 end
 
 function compare_networks(M)
-    result = fill(true, length(M), length(M))
+    result = fill(false, length(M), length(M))
     for (i,m) in enumerate(M)
         print_stats(m[1], m[2])
     end
@@ -422,8 +423,9 @@ function compare_networks(M)
     for i in 1:length(M)-1
         for j in i+1:length(M)
             println(i, j)
-            if !compare_two_networks(M[i], M[j])
-                result[i,j] = false
+            if compare_two_networks(M[i], M[j])
+                result[i,j] = true
+                result[j,i] = true
             end
         end
         Oscar.save("dir_project_data/temp_data/calc_leaves_data", result)
