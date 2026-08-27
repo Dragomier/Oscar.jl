@@ -120,7 +120,19 @@ export components_of_kernel
 export jacobian
 
 #LevelKAnalysis
-export lvl2_leaf_partition
-export hybrid_vertex_mod_sym
+export draw_path
+export add_leaves
 export draw_network
+export lvl2_leaf_partition
+export graph_from_partition
+export list_of_perm
+export hybrid_vertex_mod_sym
+export pair_list
+export cfn_model_from_the_internet_graph
+export degree_two_component_stats
+export print_stats
+export evaluate_at_points
+export check_polynomials
+export compare_two_networks
 export compare_networks
+
