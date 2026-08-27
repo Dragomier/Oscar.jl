@@ -15,6 +15,8 @@ include("MultigradedImplicitization.jl")
 
 include("serialization.jl")
 
+using Serialization: serialize, deserialize
+
 include("LevelKNetworksAnalysis.jl")
 
 
