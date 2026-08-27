@@ -35,13 +35,11 @@ function draw_network(ret, par)
             q_1 = p_3
             q_2 = p_2
             q_3 = p_1
-        end
-        if v_2 in p_2
+        elseif v_2 in p_2
             q_1 = p_1
             q_2 = p_3
             q_3 = p_2
-        end
-        if v_2 in p_3
+        elseif v_2 in p_3
             q_1 = p_1
             q_2 = p_2
             q_3 = p_3
@@ -58,15 +56,13 @@ function draw_network(ret, par)
             q_1 = p_3
             q_2 = p_1
             q_3 = p_2
-        end
 
-        if (v_1 in p_1) && (v_2 in p_3)
+        elseif (v_1 in p_1) && (v_2 in p_3)
             q_1 = p_2
             q_2 = p_1
             q_3 = p_3
-        end
 
-        if (v_1 in p_2) && (v_2 in p_3)
+        elseif (v_1 in p_2) && (v_2 in p_3)
             q_1 = p_1
             q_2 = p_2
             q_3 = p_3
@@ -97,10 +93,14 @@ function draw_network(ret, par)
     n = phylogenetic_network(g)
     M = cavender_farris_neyman_model(n)
 
+    if level(n) != 2
+        print("Error")
+        return nothing
+    else
+        print("Git000wa")
+
     return M
 end
-
-draw_network([5,6], [2,1,1])
 
 """here are functions relating to the enumeration of level-2 (hopefully level-k in general) phylogenetic networks.
 
@@ -302,30 +302,31 @@ function cfn_model_from_the_internet_graph(numbers)
     return cavender_farris_neyman_model(N)
 end
 
-function degree_two_component_stats(M, name)
-    stats = deserialize("dir_project_data/stats")
+function degree_two_component_stats(M, name, graph_stat)
+    graph_stats = deserialize("dir_project_data/graph_stats")
+    ideal_stats = deserialize("dir_project_data/ideal_stats")
     net = M.phylo_model.graph.graph
-    if !haskey(stats, name)
+    if !haskey(ideal_stats, name)
         phi = parametrization(M)
         H = components_of_kernel(2, phi, show_progress = true)
-        if isempty(H)
-            println("0")
-            stats[name] = [name, 0, 0, true]
-            serialize("dir_project_data/stats", stats) 
-            return nothing
+        S, x = model_ring(M)
+        I = ideal([gens(S)[1] - gens(S)[1]])
+        if !isempty(H)
+            I = Oscar.ideal(reduce(vcat, collect(values(H))))
         end
-        I = Oscar.ideal(reduce(vcat, collect(values(H))))
-
         dimension = dim(I)
         I_degree = degree(I)
-        is_I_prime = is_prime(I)
+        is_I_prime = nothing
 
         Oscar.save("dir_project_data/ideals/"*name, I)
+        println("saved")
 
-        stats[name] = [name, dimension, I_degree, is_I_prime] 
-        serialize("dir_project_data/stats", stats)
+        ideal_stats[name] = [name, dimension, I_degree, is_I_prime] 
+        serialize("dir_project_data/ideal_stats", ideal_stats)
+        graph_stats[name] = [name, edges(net), graph_stat[1], graph_stat[2]]
+        serialize("dir_project_data/graph_stats", graph_stats)
     end
-    data = stats[name]
+    data = ideal_stats[name]
     my_ideal = Oscar.load("dir_project_data/ideals/"*data[1])
     data[1] = my_ideal
     return data
@@ -376,17 +377,20 @@ function compare_two_networks(net_1, net_2)
     result = [false, false]
     M_1 = net_1[1]
     name_1 = net_1[2]
+    graph_stats_1 = net_1[3]
+
     M_2 = net_2[1]
     name_2 = net_2[2]
+    graph_stats_2 = net_2[3]
     
-    stats_1 = degree_two_component_stats(M_1, name_1)
-    stats_2 = degree_two_component_stats(M_2, name_2)
+    stats_1 = degree_two_component_stats(M_1, name_1, graph_stats_1)
+    stats_2 = degree_two_component_stats(M_2, name_2, graph_stats_2)
 
-    if stats_1 == nothing && stats_2 == nothing
+    if length(generators(stats_1[1])) == 0&& length(generators(stats_2[1])) == 0
         return false
     end
 
-    if stats_1 == nothing || stats_2 == nothing
+    if length(generators(stats_1[1])) == nothing || length(generators(stats_2[1]))== nothing
         return true
     end
 
@@ -416,10 +420,6 @@ end
 
 function compare_networks(M)
     result = fill(false, length(M), length(M))
-    for (i,m) in enumerate(M)
-        print_stats(m[1], m[2])
-    end
-
     for i in 1:length(M)-1
         for j in i+1:length(M)
             println(i, j)

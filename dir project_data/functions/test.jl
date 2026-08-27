@@ -1,4 +1,4 @@
-n = 6
+n = 4
 M = []
 graphs = []
 partitions = lvl2_leaf_partition(n)
@@ -12,7 +12,7 @@ for m in M
     for (i, rec_vert) in enumerate(m[1])
         print(rec_vert, m[2], "\n")
         G = draw_network(rec_vert, m[2])
-        name = string.(n)*"_"*string(i)
+        name = string.(n)*"_"*string(counter + 1)
         G_stats = [m[2], rec_vert]
         push!(graphs, [G, name, G_stats])
         counter = counter + 1
@@ -20,7 +20,7 @@ for m in M
     push!(types, counter)
 end
 
-[print_stats(g[1], g[2]) for g in graphs]
+[print_stats(g[1], g[2], g[3]) for g in graphs]
 
 println(length(graphs))
 
