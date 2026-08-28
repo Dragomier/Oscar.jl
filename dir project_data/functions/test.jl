@@ -1,6 +1,6 @@
-n = 4
-M = []
-graphs = []
+n = 4 #number of leaves
+M = [] #list of models
+graphs = [] #list of graphs
 partitions = lvl2_leaf_partition(n)
 for part in partitions
     push!(M, [hybrid_vertex_mod_sym(part), part])
