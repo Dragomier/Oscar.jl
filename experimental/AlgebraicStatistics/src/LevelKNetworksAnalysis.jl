@@ -39,7 +39,7 @@ function draw_network(ret, par)
             q_1 = p_1
             q_2 = p_3
             q_3 = p_2
-        elseif v_2 in p_3
+        else v_2 in p_3
             q_1 = p_1
             q_2 = p_2
             q_3 = p_3
@@ -62,12 +62,11 @@ function draw_network(ret, par)
             q_2 = p_1
             q_3 = p_3
 
-        elseif (v_1 in p_2) && (v_2 in p_3)
+        else (v_1 in p_2) && (v_2 in p_3)
             q_1 = p_1
             q_2 = p_2
             q_3 = p_3
         end
-
         append!(edges, draw_path(q_1))
 
         i = findfirst(==(v_1), q_2)
@@ -98,7 +97,7 @@ function draw_network(ret, par)
         return nothing
     else
         print("Git000wa")
-
+    end
     return M
 end
 
@@ -323,7 +322,7 @@ function degree_two_component_stats(M, name, graph_stat)
 
         ideal_stats[name] = [name, dimension, I_degree, is_I_prime] 
         serialize("dir_project_data/ideal_stats", ideal_stats)
-        graph_stats[name] = [name, edges(net), graph_stat[1], graph_stat[2]]
+        graph_stats[name] = [name, string.(edges(net)), graph_stat[1], graph_stat[2]]
         serialize("dir_project_data/graph_stats", graph_stats)
     end
     data = ideal_stats[name]
@@ -332,8 +331,8 @@ function degree_two_component_stats(M, name, graph_stat)
     return data
 end
 
-function print_stats(M, name)
-    stats = degree_two_component_stats(M, name)
+function print_stats(M, name, graph_stats)
+    stats = degree_two_component_stats(M, name, graph_stats)
     if stats == nothing
         println("This network has zero_ideal")
     else
@@ -386,11 +385,11 @@ function compare_two_networks(net_1, net_2)
     stats_1 = degree_two_component_stats(M_1, name_1, graph_stats_1)
     stats_2 = degree_two_component_stats(M_2, name_2, graph_stats_2)
 
-    if length(generators(stats_1[1])) == 0&& length(generators(stats_2[1])) == 0
+    if length(generators(stats_1[1])) == 0 && length(generators(stats_2[1])) == 0
         return false
     end
 
-    if length(generators(stats_1[1])) == nothing || length(generators(stats_2[1]))== nothing
+    if length(generators(stats_1[1])) == 0 || length(generators(stats_2[1]))== 0
         return true
     end
 
@@ -406,8 +405,8 @@ function compare_two_networks(net_1, net_2)
     end
 
     result[1] = check_polynomials(I_1, M_2)
-    if result[1] == false
-        return false
+    if result[1] == true
+        return true
     end
 
     result[2] = check_polynomials(I_2, M_1)

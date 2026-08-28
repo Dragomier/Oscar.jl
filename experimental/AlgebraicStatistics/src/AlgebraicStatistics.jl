@@ -19,6 +19,8 @@ using Serialization: serialize, deserialize
 
 include("LevelKNetworksAnalysis.jl")
 
+include("LevelKNetworksStatistics.jl")
+
 
 
 export indexed_ring
@@ -126,3 +128,11 @@ export lvl2_leaf_partition
 export hybrid_vertex_mod_sym
 export draw_network
 export compare_networks
+
+#LevelKStatistics
+export create_networks
+export create_matrix_comparison
+export display_in_types
+export network_polynomials
+export network_dimensions
+export network_degrees
