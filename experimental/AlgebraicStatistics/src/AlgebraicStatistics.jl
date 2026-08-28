@@ -15,7 +15,11 @@ include("MultigradedImplicitization.jl")
 
 include("serialization.jl")
 
+using Serialization: serialize, deserialize
+
 include("LevelKNetworksAnalysis.jl")
+
+include("LevelKNetworksStatistics.jl")
 
 
 
@@ -135,4 +139,12 @@ export evaluate_at_points
 export check_polynomials
 export compare_two_networks
 export compare_networks
+
+#LevelKStatistics
+export create_networks
+export create_matrix_comparison
+export display_in_types
+export network_polynomials
+export network_dimensions
+export network_degrees
 
