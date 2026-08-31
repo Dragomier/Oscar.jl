@@ -41,6 +41,7 @@ end
 
 function display_matrix(n)
     return Oscar.load("dir_project_data/network_data/"*string(n)*"_leaves_data")
+end
 
 function display_in_types(n)
     my_matrix = Oscar.load("dir_project_data/network_data/"*string(n)*"_leaves_data")
