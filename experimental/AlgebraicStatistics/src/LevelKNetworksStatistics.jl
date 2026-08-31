@@ -88,7 +88,3 @@ function network_degrees(n)
 
     return degs
 end
-
-dims = network_dimensions(4)
-dims
-
