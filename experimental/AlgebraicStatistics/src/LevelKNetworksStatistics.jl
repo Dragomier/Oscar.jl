@@ -39,6 +39,9 @@ function create_matrix_comparison(n)
     return results, types
 end
 
+function display_matrix(n)
+    return Oscar.load("dir_project_data/network_data/"*string(n)*"_leaves_data")
+
 function display_in_types(n)
     my_matrix = Oscar.load("dir_project_data/network_data/"*string(n)*"_leaves_data")
     types = Oscar.load("dir_project_data/network_data/"*string(n)*"_leaves_types_data")

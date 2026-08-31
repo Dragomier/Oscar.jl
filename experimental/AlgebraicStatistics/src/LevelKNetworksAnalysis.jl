@@ -95,8 +95,6 @@ function draw_network(ret, par)
     if level(n) != 2
         print("Error")
         return nothing
-    else
-        print("Git000wa")
     end
     return M
 end
@@ -385,33 +383,18 @@ function compare_two_networks(net_1, net_2)
     stats_1 = degree_two_component_stats(M_1, name_1, graph_stats_1)
     stats_2 = degree_two_component_stats(M_2, name_2, graph_stats_2)
 
-    if length(generators(stats_1[1])) == 0 && length(generators(stats_2[1])) == 0
+    if length(generators(stats_1[1])) == 0 || length(generators(stats_2[1])) == 0
         return false
     end
 
-    if length(generators(stats_1[1])) == 0 || length(generators(stats_2[1]))== 0
-        return true
-    end
-
-    I_1, dim_1, deg_1, prime_1 = stats_1
-    I_2, dim_2, deg_2, prime_2 = stats_2
-
-    if dim_1 > dim_2
-        result[1] = true
-    end 
-
-    if dim_2 > dim_1
-        result[2] = true
-    end
+    I_1 = stats_1[1]
+    I_2 = stats_2[1]
 
     result[1] = check_polynomials(I_1, M_2)
-    if result[1] == true
-        return true
-    end
 
     result[2] = check_polynomials(I_2, M_1)
-    if result[2] == true
-       return true
+    if result[1] && result[2] == true
+        return true
     else
         return false
     end
