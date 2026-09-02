@@ -299,6 +299,39 @@ function cfn_model_from_the_internet_graph(numbers)
     return cavender_farris_neyman_model(N)
 end
 
+function check_real_dimension(M)
+    phi = parametrization(M)
+    J = jacobian(phi)
+
+    F = GF(32003)
+    sample = 1000
+
+    R = base_ring(J)
+    n = ngens(R)
+
+    RF, yF = polynomial_ring(F, ["y$i" for i in 1:n])
+    J_F = map_entries(J) do f
+        RF(f)
+    end
+
+    ranks = Int[]
+
+    for _ in 1:sample
+        point = [rand(F) for _ in 1:n]
+
+        Jp = evaluate.(J_F, Ref(point))
+
+        push!(ranks, rank(Jp))
+    end
+    prob = count(==(maximum(ranks)), ranks)
+    if prob > sample - 10
+        println("Probability that our ideal is quadratically generated is HUGE!")
+        return maximum(ranks)
+    end
+    return nothing
+end
+
+
 function degree_two_component_stats(M, name, graph_stat)
     graph_stats = deserialize("dir_project_data/graph_stats")
     ideal_stats = deserialize("dir_project_data/ideal_stats")
@@ -311,10 +344,17 @@ function degree_two_component_stats(M, name, graph_stat)
         if !isempty(H)
             I = Oscar.ideal(reduce(vcat, collect(values(H))))
         end
-        dimension = dim(I)
+        dimension = 0
         I_degree = degree(I)
         is_I_prime = nothing
-
+        if length(leaves(net)) < 6
+            is_I_prime = is_prime(I)
+            part_dim = dim(I)
+            exp_dim = check_real_dimension(M)
+            if part_dim == exp_dim
+                dimension = part_dim
+            end
+        end
         Oscar.save("dir_project_data/ideals/"*name, I)
         println("saved")
 
@@ -380,15 +420,22 @@ function compare_two_networks(net_1, net_2)
     name_2 = net_2[2]
     graph_stats_2 = net_2[3]
     
-    stats_1 = degree_two_component_stats(M_1, name_1, graph_stats_1)
-    stats_2 = degree_two_component_stats(M_2, name_2, graph_stats_2)
+    I_1, dim_1, deg_1, is_prime_1 = degree_two_component_stats(M_1, name_1, graph_stats_1)
+    I_2, dim_2, deg_2, is_prime_2 = degree_two_component_stats(M_2, name_2, graph_stats_2)
 
-    if length(generators(stats_1[1])) == 0 || length(generators(stats_2[1])) == 0
+    if length(generators(I_1)) == 0 || length(generators(I_2)) == 0
         return false
     end
 
-    I_1 = stats_1[1]
-    I_2 = stats_2[1]
+    if is_prime_1 == true && dim_1 > 0 && is_prime_2 == true && dim_2 > 0
+        if dim_1 < dim_2
+            result[2] = true
+        end
+
+        if dim_2 < dim_1
+            result[1] = true
+        end
+    end
 
     result[1] = check_polynomials(I_1, M_2)
 
