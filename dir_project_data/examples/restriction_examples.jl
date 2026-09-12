@@ -136,4 +136,4 @@ I2 = ideal(reduce(vcat, collect(values(H2))))
 #   -q[2,2,2,2,1]*q[1,1,1,2,2] + q[2,2,1,2,2]*q[1,1,2,2,1] - q[2,1,2,2,2]*q[1,2,1,2,1] + q[2,1,1,2,1]*q[1,2,2,2,2]
 #   -q[2,2,2,1,2]*q[1,1,1,1,1] + q[2,2,1,1,1]*q[1,1,2,1,2] - q[2,1,2,1,1]*q[1,2,1,1,2] + q[2,1,1,1,2]*q[1,2,2,1,1]
 
-#using check_polynomials we can see non-containment of ideals and hence part d of the lemma holds!
+#using check_polynomials we can see non-containment of ideals and hence part d of the lemma holds! [this is probs false, calc. again!]
