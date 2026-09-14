@@ -345,16 +345,16 @@ function degree_two_component_stats(M, name, graph_stat)
             I = Oscar.ideal(reduce(vcat, collect(values(H))))
         end
         dimension = 0
-        I_degree = degree(I)
+        I_degree = 0 #set =degree(I) if you want to calculate degree.
         is_I_prime = nothing
-        if length(leaves(net)) < 6
-            is_I_prime = is_prime(I)
-            part_dim = dim(I)
-            exp_dim = check_real_dimension(M)
-            if part_dim == exp_dim
-                dimension = part_dim
-            end
-        end
+        # if length(leaves(net)) < 6
+        #     is_I_prime = is_prime(I)
+        #     part_dim = dim(I)
+        #     exp_dim = check_real_dimension(M)
+        #     if part_dim == exp_dim
+        #         dimension = part_dim
+        #     end
+        # end
         Oscar.save("dir_project_data/ideals/"*name, I)
         println("saved")
 

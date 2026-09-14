@@ -69,6 +69,7 @@ for i in 1:length(ideal_stats)
 end
 serialize("dir_project_data/ideal_stats", ideal_stats)
 
+#########################################################################################
 
 function calculate_symmetries(M)
 
@@ -110,12 +111,14 @@ function make_graphs(perm)
     graphs = []
     counter = 1
     for g in perm
-        push!(graphs, [g, "test24_"*string(counter), [[2,2,1], [0,0]]])
+        push!(graphs, [g, "test26_"*string(counter), [[2,2,1], [0,0]]])
         counter = counter + 1
     end
 
     return graphs
 end
+
+#################################################################################
 
 graphs, types = create_networks(5)
 perms, p = calculate_symmetries(graphs[24][1])
@@ -147,6 +150,8 @@ I_3 = ideal([gens(S)[1] - gens(S)[1]])
 if !isempty(H)
     I_3 = Oscar.ideal(reduce(vcat, collect(values(H))))
 end
+
+###########################################################################
 
 function generator_statistics(G)
     degrees = [total_degree(f) for f in G]
