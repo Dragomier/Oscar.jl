@@ -110,12 +110,17 @@ function make_graphs(perm)
     graphs = []
     counter = 1
     for g in perm
-        push!(graphs, [g, "test23_"*string(counter), [[2,2,1], [0,0]]])
+        push!(graphs, [g, "test24_"*string(counter), [[2,2,1], [0,0]]])
         counter = counter + 1
     end
 
     return graphs
 end
+
+graphs, types = create_networks(5)
+perms, p = calculate_symmetries(graphs[24][1])
+test = make_graphs(perms)
+compare_networks(test)
 
 for i in 1:5
     cand = []
@@ -181,3 +186,8 @@ phi = hom(R, S, y);
 I_3g = ideal(S, f_new);
 F = free_resolution(I_3g);
 betti_table(F)
+
+graphs, types = create_networks(5)
+perms, p = calculate_symmetries(graphs[24][1])
+test = make_graphs(perms)
+compare_networks(test)
