@@ -42,17 +42,17 @@ function check_quartics(graphs, n_1, n_2)
     end
 end
 
-dimensions = [check_real_dimension(graphs[i][1]) for i in 1:length(graphs)]
+# dimensions = [check_real_dimension(graphs[i][1]) for i in 1:length(graphs)]
 
-for i in 45:length(graphs)
-    M = graphs[i][1]
-    name = graphs[i][2]
-    phi = parametrization(M)
-    H = components_of_kernel(2, phi, show_progress = true)
-    I = Oscar.ideal(reduce(vcat, collect(values(H))))
-    Oscar.save("dir_project_data/ideals/"*name, I)
-    println("saved")
-end
+# for i in 45:length(graphs)
+#     M = graphs[i][1]
+#     name = graphs[i][2]
+#     phi = parametrization(M)
+#     H = components_of_kernel(2, phi, show_progress = true)
+#     I = Oscar.ideal(reduce(vcat, collect(values(H))))
+#     Oscar.save("dir_project_data/ideals/"*name, I)
+#     println("saved")
+# end
     
 function print_long_values(dict)
     for (_, values) in dict
@@ -63,11 +63,11 @@ function print_long_values(dict)
     end
 end
 
-ideal_stats = deserialize("dir_project_data/ideal_stats")
-for i in 1:length(ideal_stats)
-    ideal_stats["7_"*string(i)] = ["7_"*string(i), -1, -1, false]
-end
-serialize("dir_project_data/ideal_stats", ideal_stats)
+# ideal_stats = deserialize("dir_project_data/ideal_stats")
+# for i in 1:length(ideal_stats)
+#     ideal_stats["7_"*string(i)] = ["7_"*string(i), -1, -1, false]
+# end
+# serialize("dir_project_data/ideal_stats", ideal_stats)
 
 
 function calculate_symmetries(M)
@@ -117,40 +117,31 @@ function make_graphs(perm)
     return graphs
 end
 
+# for i in 1:5
+#     cand = []
+#     for i in 23:28
+#         M = graphs[i][1]
+#         perm, P = calculate_symmetries(M)
+#         numb = rand(1:120, 3)
+#         print(i, " ", numb, "\n")
+#         perm = perm[numb]
+#         push!(cand, make_graphs(perm))
+#     end
+#     M = compare_networks(reduce(vcat, cand))
+#     if count(==(0), M) == 18
+#         println("true")
+#     else
+#         println("false")
+#     end
+# end
 
-M = load("dir_project_data/temp_data/calc_leaves_data")
-save("dir_project_data/M26_1to11", M[1:11])
-graphs, types = create_networks(5)
-perms, p = calculate_symmetries(graphs[26][1])
-test = make_graphs(perms)
-test = test[12:120]
-compare_networks(test)
-
-for i in 1:5
-    cand = []
-    for i in 23:28
-        M = graphs[i][1]
-        perm, P = calculate_symmetries(M)
-        numb = rand(1:120, 3)
-        print(i, " ", numb, "\n")
-        perm = perm[numb]
-        push!(cand, make_graphs(perm))
-    end
-    M = compare_networks(reduce(vcat, cand))
-    if count(==(0), M) == 18
-        println("true")
-    else
-        println("false")
-    end
-end
-
-phi = parametrization(test[3][1])
-H = components_of_kernel(2, phi, show_progress = true)
-S, x = model_ring(test[3][1])
-I_3 = ideal([gens(S)[1] - gens(S)[1]])
-if !isempty(H)
-    I_3 = Oscar.ideal(reduce(vcat, collect(values(H))))
-end
+# phi = parametrization(test[3][1])
+# H = components_of_kernel(2, phi, show_progress = true)
+# S, x = model_ring(test[3][1])
+# I_3 = ideal([gens(S)[1] - gens(S)[1]])
+# if !isempty(H)
+#     I_3 = Oscar.ideal(reduce(vcat, collect(values(H))))
+# end
 
 function generator_statistics(G)
     degrees = [total_degree(f) for f in G]
@@ -182,16 +173,16 @@ function count_variables(generators)
     return counts
 end
 
-R = parent(first(gens(I_3)));
-v = ones(Int, 16);
-S, y = grade(R, v);
-phi = hom(R, S, y);
- f_new = [phi(f) for f in gens(I_3)];
-I_3g = ideal(S, f_new);
-F = free_resolution(I_3g);
-betti_table(F)
+# R = parent(first(gens(I_3)));
+# v = ones(Int, 16);
+# S, y = grade(R, v);
+# phi = hom(R, S, y);
+#  f_new = [phi(f) for f in gens(I_3)];
+# I_3g = ideal(S, f_new);
+# F = free_resolution(I_3g);
+# betti_table(F)
 
-graphs, types = create_networks(5)
-perms, p = calculate_symmetries(graphs[24][1])
-test = make_graphs(perms)
-compare_networks(test)
+# graphs, types = create_networks(5)
+# perms, p = calculate_symmetries(graphs[24][1])
+# test = make_graphs(perms)
+# compare_networks(test)
