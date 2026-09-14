@@ -316,7 +316,10 @@ function check_real_dimension(M)
 
     ranks = Int[]
 
-    for _ in 1:sample
+    for i in 1:sample
+        if i % 100 == 0
+            println("Sample ", i, " out of ", sample)
+        end
         point = [rand(F) for _ in 1:n]
 
         Jp = evaluate.(J_F, Ref(point))
@@ -325,18 +328,18 @@ function check_real_dimension(M)
     end
     prob = count(==(maximum(ranks)), ranks)
     if prob > sample - 10
-        println("Probability that our ideal is quadratically generated is HUGE!")
+        println("Probability that the dimension is correct is HUGE!")
         return maximum(ranks)
     end
+    println(maximum(ranks))
     return nothing
 end
-
 
 function degree_two_component_stats(M, name, graph_stat)
     graph_stats = deserialize("dir_project_data/graph_stats")
     ideal_stats = deserialize("dir_project_data/ideal_stats")
     net = M.phylo_model.graph.graph
-    if !haskey(ideal_stats, name)
+    if !haskey(ideal_stats, name) || length(leaves(net)) < 6
         phi = parametrization(M)
         H = components_of_kernel(2, phi, show_progress = true)
         S, x = model_ring(M)
@@ -345,16 +348,8 @@ function degree_two_component_stats(M, name, graph_stat)
             I = Oscar.ideal(reduce(vcat, collect(values(H))))
         end
         dimension = 0
-        I_degree = 0 #set =degree(I) if you want to calculate degree.
-        is_I_prime = nothing
-        # if length(leaves(net)) < 6
-        #     is_I_prime = is_prime(I)
-        #     part_dim = dim(I)
-        #     exp_dim = check_real_dimension(M)
-        #     if part_dim == exp_dim
-        #         dimension = part_dim
-        #     end
-        # end
+        I_degree = 0
+        is_I_prime = false
         Oscar.save("dir_project_data/ideals/"*name, I)
         println("saved")
 

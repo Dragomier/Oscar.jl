@@ -84,7 +84,7 @@ function network_degrees(n)
     degs = Dict{Int, Vector{String}}()
 
     for (k, v) in list_of_n_leaves
-        push!(get!(degs, v[2], String[]), k)
+        push!(get!(degs, v[3], String[]), k)
     end
 
     return degs
