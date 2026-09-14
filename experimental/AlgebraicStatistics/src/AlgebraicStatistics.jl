@@ -21,6 +21,8 @@ include("LevelKNetworksAnalysis.jl")
 
 include("LevelKNetworksStatistics.jl")
 
+include("Symmetries.jl")
+
 
 
 export indexed_ring
@@ -147,4 +149,7 @@ export display_in_types
 export network_polynomials
 export network_dimensions
 export network_degrees
+
+export calculate_symmetries
+export make_graphs
 

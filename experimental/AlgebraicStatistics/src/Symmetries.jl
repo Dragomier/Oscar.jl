@@ -110,16 +110,20 @@ function make_graphs(perm)
     graphs = []
     counter = 1
     for g in perm
-        push!(graphs, [g, "test24_"*string(counter), [[2,2,1], [0,0]]])
+        push!(graphs, [g, "test26_"*string(counter), [[2,2,1], [0,0]]])
         counter = counter + 1
     end
 
     return graphs
 end
 
+
+M = load("dir_project_data/temp_data/calc_leaves_data")
+save("dir_project_data/M26_1to11", M[1:11])
 graphs, types = create_networks(5)
-perms, p = calculate_symmetries(graphs[24][1])
+perms, p = calculate_symmetries(graphs[26][1])
 test = make_graphs(perms)
+test = test[12:120]
 compare_networks(test)
 
 for i in 1:5
